@@ -18,7 +18,9 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 const corsOptions = {
     origin:'http://127.0.0.1:5173',
-    credentials:true
+    credentials:true,
+    // methods: 'GET,POST,PUT,DELETE',  // Specify allowed methods
+    // allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
 }
 
 app.use(cors(corsOptions));
