@@ -92,18 +92,27 @@ export const login = async (req, res) => {
             profile: user.profile
         }
 
-        console.log(token);
+        // console.log(token);
 
-        return res.status(200).cookie("token", token, { 
-            maxAge: 1 * 24 * 60 * 60 * 1000, 
-            httpsOnly: true, 
-            sameSite: 'strict',
-            path: '/',                    // Makes the cookie available site-wide
-        }).json({
-            message: `Welcome back ${user.fullname}`,
-            user,
-            success: true
-        });
+        // return res.status(200).cookie("token", token, { 
+        //     maxAge: 1 * 24 * 60 * 60 * 1000, 
+        //     httpOnly: true, 
+        //     sameSite: 'None',
+        //     secure:'false',
+        //     path: '/',                    // Makes the cookie available site-wide
+        // }).json({
+        //     message: `Welcome back ${user.fullname}`,
+        //     user,
+        //     success: true
+        // });
+
+        return res.status(200).json({
+                message: `Welcome back ${user.fullname}`,
+                token,
+                user,
+                success: true
+             })
+
 
     } catch (error) {
         console.log(error);

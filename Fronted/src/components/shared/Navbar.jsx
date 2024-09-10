@@ -17,8 +17,19 @@ const Navbar = () => {
 
     const logoutHandler = async () => {
         try {
-            const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
+            const token = localStorage.getItem('authToken'); // Ensure the token is stored securely
+
+            const res = await axios.get(`${USER_API_END_POINT}/logout`, 
+                {
+                    headers:{
+                        'Content-Type':'application/json',
+                        'Authorization': `Bearer ${token}` // Include Bearer token
+                    },
+                    withCredentials:true
+            }
+            );
             if (res.data.success) {
+                localStorage.removeItem('authToken');
                 dispatch(setUser(null));
                 navigate("/");
                 toast.success(res.data.message);

@@ -20,7 +20,15 @@ const JobDescription = () => {
 
     const applyJobHandler = async () => {
         try {
-            const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {withCredentials:true});
+            const token = localStorage.getItem('authToken'); // Ensure the token is stored securely
+
+            const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {
+                headers:{
+                    'Content-Type':'application/json',
+                    'Authorization': `Bearer ${token}` // Include Bearer token
+                },
+                withCredentials:true
+        });
             
             if(res.data.success){
                 setIsApplied(true); // Update the local state
@@ -38,17 +46,30 @@ const JobDescription = () => {
     useEffect(()=>{
         const fetchSingleJob = async () => {
             try {
-                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`,{withCredentials:true});
+                const token = localStorage.getItem('authToken'); // Ensure the token is stored securely
+
+                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`,{
+                    headers:{
+                        'Content-Type':'application/json',
+                        'Authorization': `Bearer ${token}` // Include Bearer token
+                    },
+                    withCredentials:true});
                 if(res.data.success){
                     dispatch(setSingleJob(res.data.job));
                     setIsApplied(res.data.job.applications.some(application=>application.applicant === user?._id)) // Ensure the state is in sync with fetched data
                 }
             } catch (error) {
                 console.log(error);
+                // if (error.response && error.response.status === 401) {
+                //     // Optional: Clear jobs or handle unauthorized case
+                //     dispatch(setSingleJob(null)); // Clear jobs if unauthorized
+                // } else {
+                //     console.error("Failed to fetch jobs:", error);
+                // }
             }
         }
         fetchSingleJob(); 
-    },[jobId,dispatch, user?._id]);
+    },[jobId,dispatch, user?._id , user]);
 
     return (
         <div className='max-w-7xl mx-auto my-10'>
@@ -73,8 +94,9 @@ const JobDescription = () => {
                 <h1 className='font-bold my-1'>Role: <span className='pl-4 font-normal text-gray-800'>{singleJob?.title}</span></h1>
                 <h1 className='font-bold my-1'>Location: <span className='pl-4 font-normal text-gray-800'>{singleJob?.location}</span></h1>
                 <h1 className='font-bold my-1'>Description: <span className='pl-4 font-normal text-gray-800'>{singleJob?.description}</span></h1>
-                <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>{singleJob?.experience} yrs</span></h1>
+                <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>{singleJob?.experienceLevel} yrs</span></h1>
                 <h1 className='font-bold my-1'>Salary: <span className='pl-4 font-normal text-gray-800'>{singleJob?.salary}LPA</span></h1>
+                <h1 className='font-bold my-1'>requirements: <span className='pl-4 font-normal text-gray-800'>{singleJob?.requirements[0]}</span></h1>
                 <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>{singleJob?.applications?.length}</span></h1>
                 <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gray-800'>{singleJob?.createdAt.split("T")[0]}</span></h1>
             </div>

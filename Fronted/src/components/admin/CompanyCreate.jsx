@@ -16,10 +16,12 @@ const CompanyCreate = () => {
     const dispatch = useDispatch();
     const registerNewCompany = async () => {
         try {
-            
+            const token = localStorage.getItem('authToken'); // Ensure the token is stored securely
+            // Make the request with the Authorization header
             const res = await axios.post(`${COMPANY_API_END_POINT}/register`, {companyName}, {
                 headers:{
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': `Bearer ${token}` // Include Bearer token
                 },
                 withCredentials:true
             });

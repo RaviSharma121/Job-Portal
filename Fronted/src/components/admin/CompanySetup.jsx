@@ -46,9 +46,12 @@ const CompanySetup = () => {
         }
         try {
             setLoading(true);
+            const token = localStorage.getItem('authToken'); // Ensure the token is stored securely
+
             const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` // Include Bearer token
                 },
                 withCredentials: true
             });

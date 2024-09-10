@@ -46,9 +46,12 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         }
         try {
             setLoading(true);
+            const token = localStorage.getItem('authToken'); // Ensure the token is stored securely
+            // Make the request with the Authorization header
             const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` // Include Bearer token
                 },
                 withCredentials: true
             });

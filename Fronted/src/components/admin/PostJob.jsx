@@ -42,9 +42,14 @@ const PostJob = () => {
         e.preventDefault();
         try {
             setLoading(true);
+            const token = localStorage.getItem('authToken'); // Ensure the token is stored securely
+
             const res = await axios.post(`${JOB_API_END_POINT}/post`, input,{
                 headers:{
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': `Bearer ${token}` // Include Bearer token
+
+                    
                 },
                 withCredentials:true
             });
