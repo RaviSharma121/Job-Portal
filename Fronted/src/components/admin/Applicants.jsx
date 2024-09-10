@@ -15,7 +15,14 @@ const Applicants = () => {
     useEffect(() => {
         const fetchAllApplicants = async () => {
             try {
-                const res = await axios.get(`${APPLICATION_API_END_POINT}/${params.id}/applicants`, { withCredentials: true });
+            const token = localStorage.getItem('authToken'); // Ensure the token is stored securely
+
+                const res = await axios.get(`${APPLICATION_API_END_POINT}/${params.id}/applicants`, {
+                    headers:{
+                    'Content-Type':'application/json',
+                    'Authorization': `Bearer ${token}` // Include Bearer token
+                }, withCredentials: true
+             } );
                 dispatch(setAllApplicants(res.data.job));
             } catch (error) {
                 console.log(error);
